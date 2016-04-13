@@ -1,20 +1,30 @@
-var express = require('express');
-var cool = require('cool-ascii-faces');
-var app = express();
-var path = require('path');
+"use strict";
 
+const express = require('express');
+const app = express();
+const path = require('path');
+const expressLayouts = require('express-ejs-layouts');
 
-app.use(express.static(__dirname + '/'));
+app.set('port', (process.env.PORT || 5000));
+app.use(express.static(__dirname + '/public'));
+app.use(express.static(__dirname + '/examples'));
 app.use(express.static(__dirname + '/tests'));
-app.use(express.static(__dirname + '/public/views'));
+app.set('views', path.join(__dirname, 'views'));
+app.set('view engine', 'ejs');
+app.use(expressLayouts);
 
-app.get('/', function (req, res) {
-  res.sendFile(path.join(__dirname + '/public/views/index.html'));
-});
-app.get('/cool', function(request, response) {
-  response.send(cool());
+
+
+const calculate = require('./models/calculate');
+
+app.get('/', (request, response) => {
+  response.render('index', { title: 'Analizador CSV' });
 });
 
-app.listen(process.env.PORT || 3000, function () {
-  console.log('Example app listening on port 3000!');
+app.get('/csv', (request, response) => {
+  response.send({ "rows": calculate(request.query.input) });
+});
+
+app.listen(app.get('port'), () => {
+    console.log(`Node app is running at localhost: ${app.get('port')}` );
 });

@@ -4,7 +4,7 @@ var gulp = require('gulp'),
   minifyHTML = require('gulp-minify-html'),
   karma = require('karma').server,
   gulp = require('gulp');
-  
+
 gulp.task('minify', function() {
   gulp.src(['!assets/js/*.min.js', 'assets/js/*.js'])
     .pipe(uglify())
@@ -16,18 +16,18 @@ gulp.task('minify', function() {
   gulp.src('index.html')
     .pipe(minifyHTML())
     .pipe(rename(function(path) {
-      path.basename += ".min"
+      path.basename += ".min";
     }))
-    .pipe(gulp.dest('minified'))
+    .pipe(gulp.dest('minified'));
 
   gulp.src(['!assets/css/*.min.css', 'assets/css/*.css'])
     .pipe(minifyCSS({
       keepBreaks: true
     }))
     .pipe(rename(function(path) {
-      path.basename += ".min"
+      path.basename += ".min";
     }))
-    .pipe(gulp.dest('assets/css'))
+    .pipe(gulp.dest('assets/css'));
 });
 
 gulp.task('tests', function(done) {
